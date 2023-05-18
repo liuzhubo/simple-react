@@ -24,6 +24,8 @@ const ReactElement = function (
 	return element;
 };
 
+// 针对子节点中无兄弟节点情况, 老版称为 createElement
+// eg <div>1</div> => (babel编译) jsx('div', { children: '1' })
 export const jsx = (type: ElementType, config: any, ...maybeChildren: any) => {
 	let key: Key = null;
 	const props: Props = {};
