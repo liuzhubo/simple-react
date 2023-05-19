@@ -1,14 +1,15 @@
-import { Props, Key, Ref } from 'shared/ReactTypes';
-import { WorkTag } from './workTag';
+import { Props, Key, Ref, ReactElementType } from 'shared/ReactTypes';
+import { FunctionComponent, HostComponent, WorkTag } from './workTag';
 import { Flags, NoFlags } from './fiberFlags';
 import { Container } from 'hostConfig';
+import { UpdateQueue } from './updateQueue';
 export class FiberNode {
 	type: any;
 	tag: WorkTag;
 	key: Key;
 	pendingProps: Props;
 	memorizedProps: Props | null;
-	momorizedState: any;
+	memorizedState: any;
 	stateNode: any;
 	ref: Ref;
 	return: FiberNode | null;
@@ -38,7 +39,7 @@ export class FiberNode {
 		this.memorizedProps = null;
 		this.alternate = null;
 		this.updateQueue = null;
-		this.momorizedState = null;
+		this.memorizedState = null;
 
 		// 副作用
 		this.flags = NoFlags;
@@ -76,7 +77,20 @@ export const createWorkInProgress = (
 	wip.updateQueue = current.updateQueue;
 	wip.child = current.child;
 	wip.memorizedProps = current.memorizedProps;
-	wip.momorizedState = current.momorizedState;
+	wip.memorizedState = current.memorizedState;
 
 	return wip;
 };
+
+export function createFiberFromElement(element: ReactElementType): FiberNode {
+	const { type, key, props } = element;
+	let fiberTag: WorkTag = FunctionComponent;
+	if (typeof type === 'string') {
+		fiberTag = HostComponent;
+	} else if (typeof type !== 'function') {
+		console.warn('未实现的tag', element);
+	}
+	const fiber = new FiberNode(fiberTag, props, key);
+	fiber.type = type;
+	return fiber;
+}
