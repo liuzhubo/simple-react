@@ -10,13 +10,13 @@ export const beginWork = (wip: FiberNode) => {
 		case HostRoot:
 			return updateHostRoot(wip);
 		case HostComponent:
-			break;
+			return updateHostComponent(wip);
 		case HostText:
-			break;
+			return null;
 		default:
 			console.log('未实现的tag');
 	}
-	return wip;
+	return null;
 };
 
 function updateHostRoot(wip: FiberNode) {
