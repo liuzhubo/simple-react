@@ -1,5 +1,6 @@
 import {
 	appendInitialChild,
+	Container,
 	createInstance,
 	createTextInstance
 } from 'hostConfig';
@@ -20,7 +21,8 @@ export const completeWork = (wip: FiberNode) => {
 				// update
 			} else {
 				// mount
-				const instance = createInstance(wip.type, newProps);
+				// const instance = createInstance(wip.type, newProps);
+				const instance = createInstance(wip.type);
 				appendAllChildren(instance, wip);
 				wip.stateNode = instance;
 				bubbleProperties(wip);
@@ -45,7 +47,7 @@ export const completeWork = (wip: FiberNode) => {
 	}
 };
 
-function appendAllChildren(parent: FiberNode, wip: FiberNode) {
+function appendAllChildren(parent: Container, wip: FiberNode) {
 	let node = wip.child;
 	while (node !== null) {
 		if (node.tag === HostComponent || node.tag === HostText) {
